@@ -6,7 +6,6 @@ import InputBase from "@mui/material/InputBase";
 
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function Topbar() {
