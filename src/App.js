@@ -15,6 +15,8 @@ import Games from "./scenes/games";
 import RentGame from "./scenes/rent";
 import RentedGames from "./scenes/rentedgames";
 import Customers from "./scenes/customers";
+import CreateUser from "./scenes/createuser";
+import WorstGameForm from "./components/WorstGameForm";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -30,6 +32,7 @@ function App() {
   const [dataRentGames, setDataRentGames] = useState([]);
   const [dataNoRentGames, setNoDataRentGames] = useState([]);
   const [dataCustomers, setDataCustomers] = useState([]);
+  const [gamesNames, setGamesNames] = useState([]);
   const [loding, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -78,6 +81,22 @@ function App() {
       });
   }
 
+  async function fetchGamesName() {
+    client
+      .get(`/game/get_games_names`)
+      .then((actualData) => {
+        setGamesNames(actualData.data);
+        console.log(actualData.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setDataGames(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   async function fetchDataGames() {
     client
       .get(`/game/all_games`)
@@ -94,6 +113,7 @@ function App() {
   }
 
   useEffect(() => {
+    fetchGamesName();
     fetchDataGames();
     fetchDataNoRentedGames();
     fetchDataRentGames();
@@ -113,7 +133,7 @@ function App() {
           <div className="app">
             <Sidebar />
             <main className="content">
-              <Topbar />
+              <Topbar data={gamesNames} />
               <Routes>
                 <Route path="/games" element={<Games data={dataGames} />} />
                 <Route
@@ -128,6 +148,8 @@ function App() {
                   path="/customers"
                   element={<Customers data={dataCustomers} client={client} />}
                 />
+                <Route path="/createuser" element={<CreateUser />} />
+                <Route path="/creategame" element={<WorstGameForm />} />
               </Routes>
             </main>
           </div>

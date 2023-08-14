@@ -78,7 +78,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                  Admin
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -105,10 +105,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Maciej
+                  RentGame
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  Shop
                 </Typography>
               </Box>
             </Box>
@@ -158,9 +158,16 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
+              title="CreateUser"
+              to="/createuser"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="CreateWorstGame"
+              to="/creategame"
+              icon={<ExtensionOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />

@@ -4,7 +4,7 @@ import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "./Header";
 
-export default function UserForm() {
+export default function UserForm({ data }) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const handleFormSubmit = (values) => {
     console.log(values);
