@@ -1,9 +1,9 @@
 import { Box, useTheme } from "@mui/material";
-// import { useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 
 import { useEffect, useState } from "react";
+import Popup from "reactjs-popup";
 import Header from "../../components/Header";
 
 function converData(data) {
@@ -28,7 +28,7 @@ function converData(data) {
   return converedData;
 }
 
-const RentedGames = ({ data }) => {
+const RentedGames = ({ data, client }) => {
   console.log(data);
 
   const theme = useTheme();
@@ -75,10 +75,19 @@ const RentedGames = ({ data }) => {
       disableClickEventBubbling: true,
       renderCell: (params) => {
         const onClick = () => {
-          console.log(`jestesmy tutaj ${params.id}`);
+          console.log(params.row.id);
+
+          client
+            .post("game/cancel_borow_game", { borrowId: params.row.id })
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         };
 
-        return <button onClick={onClick}>Click</button>;
+        return <button onClick={onClick}>Cancel Rent</button>;
       },
     },
   ];

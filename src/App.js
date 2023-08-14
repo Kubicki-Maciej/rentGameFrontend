@@ -14,6 +14,7 @@ import axios from "axios";
 import Games from "./scenes/games";
 import RentGame from "./scenes/rent";
 import RentedGames from "./scenes/rentedgames";
+import Customers from "./scenes/customers";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -28,6 +29,7 @@ function App() {
   const [dataGames, setDataGames] = useState([]);
   const [dataRentGames, setDataRentGames] = useState([]);
   const [dataNoRentGames, setNoDataRentGames] = useState([]);
+  const [dataCustomers, setDataCustomers] = useState([]);
   const [loding, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -40,6 +42,21 @@ function App() {
       .catch((err) => {
         setError(err.message);
         setDataGames(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function fetchDataCustomers() {
+    client
+      .get(`/customer/all_users`)
+      .then((actualData) => {
+        setDataCustomers(actualData.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setDataCustomers(null);
       })
       .finally(() => {
         setLoading(false);
@@ -80,10 +97,12 @@ function App() {
     fetchDataGames();
     fetchDataNoRentedGames();
     fetchDataRentGames();
+    fetchDataCustomers();
     setInterval(() => {
       fetchDataGames();
       fetchDataNoRentedGames();
       fetchDataRentGames();
+      fetchDataCustomers();
     }, 15000);
   }, []);
 
@@ -103,7 +122,11 @@ function App() {
                 />
                 <Route
                   path="/rentedgames"
-                  element={<RentedGames data={dataRentGames} />}
+                  element={<RentedGames data={dataRentGames} client={client} />}
+                />
+                <Route
+                  path="/customers"
+                  element={<Customers data={dataCustomers} client={client} />}
                 />
               </Routes>
             </main>
