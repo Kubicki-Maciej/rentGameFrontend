@@ -7,59 +7,69 @@ import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 
 function converData(data) {
-  console.log(data);
   const converedData = [];
   data.forEach((e) => {
     const temp_category = [];
-    e.category.forEach((category) =>
+    e.game.category.forEach((category) =>
       temp_category.push(category.name_game_type)
     );
     converedData.push({
       id: e.id,
-      name: e.name,
-      ean: e.ean,
-      max_players: e.max_players,
-      category: temp_category,
+      id_customer: e.customer.id,
+      name_customer: `${e.customer.first_name} ${e.customer.last_name}`,
+      phone_customer: e.customer.phone,
+      id_game: e.game.id,
+      name_game: e.game.name,
+      category_game: temp_category,
+      rent_start: e.date_borow_start,
     });
   });
+
   return converedData;
 }
 
-const RentGame = ({ data }) => {
-  //   console.log(data);
+const RentedGames = ({ data }) => {
+  console.log(data);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    { field: "id", headerName: "ID_RentedGame", flex: 0.5 },
 
     {
-      field: "name",
-      headerName: "Name",
+      field: "name_game",
+      headerName: "GameName",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "max_players",
-      headerName: "Players",
+      field: "name_customer",
+      headerName: "Customer",
+      type: "number",
+      headerAlign: "left",
+      align: "left",
+    },
+    {
+      field: "phone_customer",
+      headerName: "Phone",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
 
     {
-      field: "category",
+      field: "category_game",
       headerName: "Category",
       flex: 1,
     },
     {
-      field: "ean",
-      headerName: "ean",
+      field: "rent_start",
+      headerName: "Rental date",
       flex: 1,
     },
     {
       field: "button",
-      headerName: "Action",
+      headerName: "Action_name:Endrent",
       sortable: false,
       width: 100,
       disableClickEventBubbling: true,
@@ -75,7 +85,7 @@ const RentGame = ({ data }) => {
 
   return (
     <Box m="20px">
-      <Header title="Rent Game" subtitle="Chose game to borrow" />
+      <Header title="Games Rented" subtitle="Games rented by customer" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -119,4 +129,4 @@ const RentGame = ({ data }) => {
   );
 };
 
-export default RentGame;
+export default RentedGames;

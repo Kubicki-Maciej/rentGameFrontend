@@ -12,6 +12,8 @@ import axios from "axios";
 
 // imports
 import Games from "./scenes/games";
+import RentGame from "./scenes/rent";
+import RentedGames from "./scenes/rentedgames";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -24,8 +26,41 @@ const client = axios.create({
 function App() {
   const [theme, colorMode] = useMode();
   const [dataGames, setDataGames] = useState([]);
+  const [dataRentGames, setDataRentGames] = useState([]);
+  const [dataNoRentGames, setNoDataRentGames] = useState([]);
   const [loding, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  async function fetchDataRentGames() {
+    client
+      .get(`/game/get_all_games_with_rent`)
+      .then((actualData) => {
+        setDataRentGames(actualData.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setDataGames(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function fetchDataNoRentedGames() {
+    client
+      .get(`/game/get_all_games_with_no_rent`)
+      .then((actualData) => {
+        setNoDataRentGames(actualData.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setDataGames(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   async function fetchDataGames() {
     client
       .get(`/game/all_games`)
@@ -42,9 +77,14 @@ function App() {
   }
 
   useEffect(() => {
+    fetchDataGames();
+    fetchDataNoRentedGames();
+    fetchDataRentGames();
     setInterval(() => {
       fetchDataGames();
-    }, 5000);
+      fetchDataNoRentedGames();
+      fetchDataRentGames();
+    }, 15000);
   }, []);
 
   return (
@@ -57,6 +97,14 @@ function App() {
               <Topbar />
               <Routes>
                 <Route path="/games" element={<Games data={dataGames} />} />
+                <Route
+                  path="/rentgame"
+                  element={<RentGame data={dataNoRentGames} />}
+                />
+                <Route
+                  path="/rentedgames"
+                  element={<RentedGames data={dataRentGames} />}
+                />
               </Routes>
             </main>
           </div>

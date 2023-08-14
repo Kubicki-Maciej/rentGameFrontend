@@ -56,20 +56,6 @@ const Games = ({ data }) => {
       headerName: "ean",
       flex: 1,
     },
-    {
-      field: "button",
-      headerName: "Action",
-      sortable: false,
-      width: 100,
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        const onClick = () => {
-          console.log(`jestesmy tutaj ${params.id}`);
-        };
-
-        return <button onClick={onClick}>Click</button>;
-      },
-    },
   ];
 
   return (
