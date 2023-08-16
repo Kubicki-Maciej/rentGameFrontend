@@ -1,13 +1,51 @@
 import { Box, Button, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "./Header";
 
-export default function UserForm() {
+export default function UserForm({ client }) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const handleFormSubmit = (values) => {
+  useEffect(() => {}, []);
+
+  async function createCustomer(values) {
+    //  not workin
+    // client
+    //   .post(`/customer/create_customer`, data)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
     console.log(values);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        first_name: values.firstName,
+        last_name: values.lastName,
+        phone: values.contact,
+      }),
+    };
+    fetch("http://127.0.0.1:8000/customer/create_customer", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }
+
+  const handleFormSubmit = (values) => {
+    const data = {
+      first_name: values.firstName,
+      last_name: values.lastName,
+      phone: values.contact,
+    };
+    console.log("data");
+    console.log(data);
+
+    // createCustomer(data);
+    createCustomer(values);
   };
 
   return (
@@ -104,8 +142,5 @@ const checkoutSchema = yup.object().shape({
 const initialValues = {
   firstName: "",
   lastName: "",
-  email: "",
   contact: "",
-  address1: "",
-  address2: "",
 };

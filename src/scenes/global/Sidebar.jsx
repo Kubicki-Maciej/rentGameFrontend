@@ -159,14 +159,21 @@ const Sidebar = () => {
             />
             <Item
               title="CreateUser"
-              to="/createuser"
+              to="/adduser"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="CreateWorstGame"
-              to="/creategame"
+              title="Add Game"
+              to="/addgame"
+              icon={<ExtensionOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Add Category"
+              to="/addcategory"
               icon={<ExtensionOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

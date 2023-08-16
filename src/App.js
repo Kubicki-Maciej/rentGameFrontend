@@ -16,7 +16,8 @@ import RentGame from "./scenes/rent";
 import RentedGames from "./scenes/rentedgames";
 import Customers from "./scenes/customers";
 import CreateUser from "./scenes/createuser";
-import WorstGameForm from "./components/WorstGameForm";
+import CreateGameForm from "./components/GameForm";
+import CreateCategoryForm from "./components/CategoryForm";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -119,10 +120,10 @@ function App() {
     fetchDataRentGames();
     fetchDataCustomers();
     setInterval(() => {
-      fetchDataGames();
-      fetchDataNoRentedGames();
-      fetchDataRentGames();
-      fetchDataCustomers();
+      // fetchDataGames();
+      // fetchDataNoRentedGames();
+      // fetchDataRentGames();
+      // fetchDataCustomers();
     }, 15000);
   }, []);
 
@@ -146,10 +147,20 @@ function App() {
                 />
                 <Route
                   path="/customers"
-                  element={<Customers data={dataCustomers} client={client} />}
+                  element={<Customers data={dataCustomers} />}
                 />
-                <Route path="/createuser" element={<CreateUser />} />
-                <Route path="/creategame" element={<WorstGameForm />} />
+                <Route
+                  path="/adduser"
+                  element={<CreateUser client={client} />}
+                />
+                <Route
+                  path="/addgame"
+                  element={<CreateGameForm client={client} />}
+                />
+                <Route
+                  path="/addcategory"
+                  element={<CreateCategoryForm client={client} />}
+                />
               </Routes>
             </main>
           </div>

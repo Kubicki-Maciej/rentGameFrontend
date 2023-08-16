@@ -1,18 +1,142 @@
 import { Box, Button, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormLabel,
+  FormControl,
+} from "@mui/material/";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "./Header";
+import { esES } from "@mui/x-data-grid";
 
-export default function UserForm({ data }) {
+export default function CreateGameForm({ client }) {
+  const [gamesCategory, setGamesCategory] = useState([]);
+
+  const [checked, setChecked] = useState([false, false]);
+  const [gameTypes, setGameTypes] = useState([]);
+
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  useEffect(() => {
+    getCategorys();
+
+    console.log("gamesCategory");
+    console.log(gamesCategory);
+  }, []);
+  function createDataGame() {
+    // data = {};
+    // return data;
+  }
+  async function createGameWithCategorys(data) {
+    client
+      .post(`/game/create_game_with_category`, data)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function getCategorys() {
+    client
+      .get(`/game/get_all_games_category`)
+      .then((actualData) => {
+        setGamesCategory(actualData.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function createCategory(data) {
+    client
+      .post(`/game/create_category`, data)
+      .then((response) => {
+        console.log(response.data);
+        getCategorys();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const handleFormSubmit = (values) => {
-    console.log(values);
+    console.log(gameTypes);
+    const categoryCheckBoxList = [];
+    gameTypes.forEach((element) => {
+      if (element.state === true) {
+        categoryCheckBoxList.push({ id: element.id });
+      }
+    });
+    const data = {
+      name: values.gameName,
+      max_players: Number(values.maxPlayers),
+      ean: Number(values.ean),
+      category: categoryCheckBoxList,
+    };
+    console.log(data);
+    createGameWithCategorys(data);
+  };
+
+  const handleCheckboxChange = (index, option) => (event) => {
+    const newChecked = [...checked];
+    newChecked[index] = event.target.checked;
+    setChecked(newChecked);
+
+    const contains = gameTypes.some((type) => type.id === option.id);
+    if (!contains) {
+      gameTypes.push(option);
+    }
+    gameTypes.forEach((e) => {
+      if (e.id === option.id) {
+        if (e.state === false) {
+          e.state = true;
+        } else {
+          e.state = false;
+        }
+      } else {
+        console.log("point 2");
+      }
+    });
+
+    console.log("gameTypes");
+    console.log(gameTypes);
+  };
+
+  const generateGameTypeOptions = () => {
+    if (gamesCategory) {
+      const categoryObjects = [];
+      gamesCategory.map((object, index) =>
+        categoryObjects.push({
+          id: object.id,
+          categoryName: object.name_game_type,
+          state: false,
+          index: index,
+        })
+      );
+      // console.log("jest games category tworzy nowe kategorie");
+      return categoryObjects.map((category, index) => (
+        <FormControlLabel
+          control={
+            <Checkbox
+              onChange={handleCheckboxChange(index, category)}
+              // name={option.categoryName}
+            />
+          }
+          label={category.categoryName}
+        />
+      ));
+    } else {
+      return <Box>Loading</Box>;
+    }
   };
 
   return (
     <Box m="20px">
-      <Header title="CREATE USER" subtitle="Create a New User Profile" />
+      <Header title="CREATE GAME" subtitle="Add new game to database" />
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -40,26 +164,26 @@ export default function UserForm({ data }) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="Game Name"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
+                value={values.gameName}
+                name="gameName"
+                error={!!touched.gameName && !!errors.gameName}
+                helperText={touched.gameName && errors.gameName}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Last Name"
+                label="Max Players"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
+                value={values.maxPlayers}
+                name="maxPlayers"
+                error={!!touched.maxPlayers && !!errors.maxPlayers}
+                helperText={touched.maxPlayers && errors.maxPlayers}
                 sx={{ gridColumn: "span 2" }}
               />
 
@@ -67,19 +191,29 @@ export default function UserForm({ data }) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Contact Number"
+                label="Ean"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
+                value={values.ean}
+                name="ean"
+                error={!!touched.ean && !!errors.ean}
+                helperText={touched.ean && errors.ean}
+                sx={{ gridColumn: "span 5" }}
               />
+            </Box>
+            <Box sx={{}}>
+              <FormControl
+                sx={{ m: 3 }}
+                variant="standard"
+                component="fieldset"
+              >
+                <Box>Take types</Box>
+                {generateGameTypeOptions()}
+              </FormControl>
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                Add new game
               </Button>
             </Box>
           </form>
@@ -89,23 +223,14 @@ export default function UserForm({ data }) {
   );
 }
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
 const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  contact: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
+  gameName: yup.string().required("required"),
+  maxPlayers: yup.string().required("required"),
+  ean: yup.string().required("required"),
 });
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  address1: "",
-  address2: "",
+  gameName: "",
+  maxPlayers: "",
+  ean: "",
 };
