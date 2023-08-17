@@ -1,5 +1,5 @@
 import { Box, useTheme, Button } from "@mui/material";
-
+import Popup from "reactjs-popup";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -30,6 +30,16 @@ function converData(data) {
 const RentGame = ({ data }) => {
   const [gameSelected, setGameSelected] = useState([]);
   const [popUpElement, setPopUpElement] = useState(false);
+  const [gameToPopUp, setGameToPopUp] = useState();
+
+  function showSelected() {
+    console.log(gameSelected);
+    // convert to data
+    const data = { borowGames: [] };
+    gameSelected.forEach((id) => data.borowGames.push({ id_game: id }));
+    console.log(data);
+    return data;
+  }
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -114,25 +124,35 @@ const RentGame = ({ data }) => {
           },
         }}
       >
-        <PopUpBorrowGame trigger={false}>
-          <h1>POPUP</h1>
-        </PopUpBorrowGame>
         <DataGrid
           checkboxSelection
           rows={converData(data)}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
+          onRowSelectionModelChange={(itm) => setGameSelected(itm)}
         />
       </Box>
-      <Button
-        sx={{ marginTop: 2 }}
-        type="submit"
-        variant="contained"
-        color="secondary"
-        onClick={() => navigate("./borrowgame")}
+      <Popup
+        modal
+        nested
+        position="right center"
+        trigger={
+          <Button
+            sx={{ marginTop: 2 }}
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              popUpElement ? setPopUpElement(false) : setPopUpElement(true);
+              setGameToPopUp(gameSelected);
+            }}
+          >
+            Rent Game
+          </Button>
+        }
       >
-        Rent Game
-      </Button>
+        <PopUpBorrowGame trigger={popUpElement} data={gameToPopUp} />
+      </Popup>
     </Box>
   );
 };
