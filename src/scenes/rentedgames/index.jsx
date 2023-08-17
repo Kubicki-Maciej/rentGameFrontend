@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 
@@ -29,7 +29,19 @@ function converData(data) {
 }
 
 const RentedGames = ({ data, client }) => {
-  console.log(data);
+  const [gameSelected, setGameSelected] = useState([]);
+
+  function showSelected() {
+    console.log("gameSelected");
+    console.log(gameSelected);
+  }
+  function cancelRent() {
+    // 1)
+    // set game is_rent = false
+    // 2)
+    // set BorowedGame is_rent false and end_date
+    //
+  }
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -97,7 +109,7 @@ const RentedGames = ({ data, client }) => {
       <Header title="Games Rented" subtitle="Games rented by customer" />
       <Box
         m="40px 0 0 0"
-        height="75vh"
+        height="60vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -134,6 +146,15 @@ const RentedGames = ({ data, client }) => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
+      <Button
+        sx={{ m: 2 }}
+        type="submit"
+        variant="contained"
+        color="secondary"
+        onClick={() => showSelected()}
+      >
+        Cancel Rent
+      </Button>
     </Box>
   );
 };

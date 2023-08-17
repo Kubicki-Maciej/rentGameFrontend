@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 // import { useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -26,7 +26,7 @@ function converData(data) {
 
 const Games = ({ data }) => {
   //   console.log(data);
-
+  const [gameSelected, setGameSelected] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
@@ -98,6 +98,7 @@ const Games = ({ data }) => {
           rows={converData(data)}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
+          onRowSelectionModelChange={(itm) => setGameSelected(itm)}
         />
       </Box>
     </Box>
