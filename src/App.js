@@ -18,6 +18,7 @@ import Customers from "./scenes/customers";
 import CreateUser from "./scenes/createuser";
 import CreateGameForm from "./components/GameForm";
 import CreateCategoryForm from "./components/CategoryForm";
+import BorrowGames from "./scenes/borrowgames";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -147,7 +148,7 @@ function App() {
                 />
                 <Route
                   path="/customers"
-                  element={<Customers data={dataCustomers} />}
+                  element={<Customers data={dataCustomers} client={client} />}
                 />
                 <Route
                   path="/adduser"
@@ -160,6 +161,10 @@ function App() {
                 <Route
                   path="/addcategory"
                   element={<CreateCategoryForm client={client} />}
+                />
+                <Route
+                  path="rentgame/borrowgame"
+                  element={<BorrowGames client={client} />}
                 />
               </Routes>
             </main>

@@ -1,12 +1,11 @@
 import { Box, useTheme, Button } from "@mui/material";
-
+import useNavigate from "react-router-dom";
+// import { useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-
 import { tokens } from "../../theme";
+
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import PopUpBorrowGame from "../popupborrowgames";
 
 function converData(data) {
   console.log(data);
@@ -27,11 +26,9 @@ function converData(data) {
   return converedData;
 }
 
-const RentGame = ({ data }) => {
+const BorrowGames = ({ data, client }) => {
   const [gameSelected, setGameSelected] = useState([]);
-  const [popUpElement, setPopUpElement] = useState(false);
 
-  const navigate = useNavigate();
   const theme = useTheme();
 
   const colors = tokens(theme.palette.mode);
@@ -81,10 +78,10 @@ const RentGame = ({ data }) => {
 
   return (
     <Box m="20px">
-      <h1>RentGame</h1>
+      <Header title="Rent Game" subtitle="Chose game to borrow" />
       <Box
-        m="20px 0 0 0"
-        height="65vh"
+        m="40px 0 0 0"
+        height="60vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -114,9 +111,6 @@ const RentGame = ({ data }) => {
           },
         }}
       >
-        <PopUpBorrowGame trigger={false}>
-          <h1>POPUP</h1>
-        </PopUpBorrowGame>
         <DataGrid
           checkboxSelection
           rows={converData(data)}
@@ -125,11 +119,11 @@ const RentGame = ({ data }) => {
         />
       </Box>
       <Button
-        sx={{ marginTop: 2 }}
+        sx={{ m: 2 }}
         type="submit"
         variant="contained"
         color="secondary"
-        onClick={() => navigate("./borrowgame")}
+        onClick={() => console.log(gameSelected)}
       >
         Rent Game
       </Button>
@@ -137,4 +131,4 @@ const RentGame = ({ data }) => {
   );
 };
 
-export default RentGame;
+export default BorrowGames;
