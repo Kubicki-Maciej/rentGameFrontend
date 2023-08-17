@@ -32,15 +32,25 @@ const RentedGames = ({ data, client }) => {
   const [gameSelected, setGameSelected] = useState([]);
 
   function showSelected() {
-    console.log("gameSelected");
     console.log(gameSelected);
+    // convert to data
+    const data = { borowed_games: [] };
+    gameSelected.forEach((id) =>
+      data.borowed_games.push({ id_borrow_game: id })
+    );
+    console.log(data);
+    return data;
   }
+
   function cancelRent() {
-    // 1)
-    // set game is_rent = false
-    // 2)
-    // set BorowedGame is_rent false and end_date
-    //
+    client
+      .post(`/game/cancel_borow_game`, showSelected())
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const theme = useTheme();
@@ -99,7 +109,11 @@ const RentedGames = ({ data, client }) => {
             });
         };
 
-        return <button onClick={onClick}>Cancel Rent</button>;
+        return (
+          <Button variant="contained" color="secondary" onClick={onClick}>
+            Cancel Rent
+          </Button>
+        );
       },
     },
   ];
@@ -144,6 +158,7 @@ const RentedGames = ({ data, client }) => {
           rows={converData(data)}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
+          onRowSelectionModelChange={(itm) => setGameSelected(itm)}
         />
       </Box>
       <Button
@@ -151,7 +166,7 @@ const RentedGames = ({ data, client }) => {
         type="submit"
         variant="contained"
         color="secondary"
-        onClick={() => showSelected()}
+        onClick={() => cancelRent()}
       >
         Cancel Rent
       </Button>
