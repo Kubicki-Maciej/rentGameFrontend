@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/rentGameFrontend/static/css/main.1006506e.css",
+    "main.js": "/rentGameFrontend/static/js/main.f30a97d7.js",
+    "index.html": "/rentGameFrontend/index.html",
+    "main.1006506e.css.map": "/rentGameFrontend/static/css/main.1006506e.css.map",
+    "main.f30a97d7.js.map": "/rentGameFrontend/static/js/main.f30a97d7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1006506e.css",
+    "static/js/main.f30a97d7.js"
+  ]
+}
