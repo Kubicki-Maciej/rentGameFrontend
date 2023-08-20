@@ -29,7 +29,7 @@ export default function UserForm({ client }) {
         phone: values.contact,
       }),
     };
-    fetch("https://rent-game.vercel.app//customer/create_customer", requestOptions)
+    fetch("https://rent-game.vercel.app/customer/create_customer", requestOptions)
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error) => console.error(error));

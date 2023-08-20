@@ -115,12 +115,14 @@ function App() {
   }
 
   useEffect(() => {
+    console.log('ping');
     fetchGamesName();
     fetchDataGames();
     fetchDataNoRentedGames();
     fetchDataRentGames();
     fetchDataCustomers();
     setInterval(() => {
+      // console.log('ping');
       // fetchDataGames();
       // fetchDataNoRentedGames();
       // fetchDataRentGames();
